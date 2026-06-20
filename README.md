@@ -121,3 +121,66 @@ Ran all test suites.
 * Header `x-api-key` ausente → respuesta HTTP 401.
 * API Key incorrecta → respuesta HTTP 401.
 * API Key válida (`secreto-demo`) → invoca `next()` sin generar respuesta.
+
+## Endpoint documentado
+
+### POST /v2/inscripciones
+
+Permite registrar una inscripción académica de un estudiante.
+
+#### Header requerido
+
+| Header    | Valor        |
+| --------- | ------------ |
+| x-api-key | secreto-demo |
+
+#### Body
+
+```json
+{
+  "estudianteID": "123",
+  "materias": ["Middleware"],
+  "periodoID": "2026-A",
+  "metodo_pago": "Transferencia"
+}
+```
+
+#### Respuesta exitosa (201)
+
+```json
+{
+  "version": "v2",
+  "message": {
+    "estudianteID": "123",
+    "materias": ["Middleware"],
+    "periodoID": "2026-A",
+    "metodo_pago": "Transferencia"
+  }
+}
+```
+
+#### Errores posibles
+
+**400 Bad Request**
+
+Campos obligatorios faltantes o método de pago inválido.
+
+**401 Unauthorized**
+
+API key inválida o ausente.
+
+## Versionado
+
+### Cambio compatible (Backward Compatible)
+
+Agregar un campo opcional llamado `correoInstitucional` al body de la inscripción.
+
+**Justificación:**
+Los clientes existentes seguirán funcionando porque el nuevo campo no es obligatorio.
+
+### Cambio incompatible (Breaking Change)
+
+Cambiar el nombre del campo `estudianteID` por `idEstudiante`.
+
+**Justificación:**
+Los clientes actuales envían `estudianteID`. Si el servidor deja de aceptarlo, las aplicaciones existentes producirán errores y dejarán de funcionar correctamente.

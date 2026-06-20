@@ -1,0 +1,83 @@
+openapi: "3.1.0"
+
+info:
+  title: "UIDE Inscripciones API"
+  version: "2.0.0"
+  description: "API para gestión de inscripciones académicas"
+  license:
+    name: "MIT"
+    identifier: "MIT"
+
+servers:
+  - url: http://localhost:3000
+    description: "Servidor local"
+
+paths:
+  /v2/inscripciones:
+    post:
+      operationId: crearInscripcionV2
+      summary: "Registrar una inscripción académica"
+
+      security:
+        - ApiKeyAuth: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InscripcionV2Request"
+            example:
+              estudianteID: "123"
+              materias:
+                - "Middleware"
+              periodoID: "2026-A"
+              metodo_pago: "Transferencia"
+
+      responses:
+        "201":
+          description: "Inscripción creada correctamente"
+
+        "400":
+          description: "Datos inválidos"
+
+        "401":
+          description: "API key inválida o ausente"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+  schemas:
+    InscripcionV2Request:
+      type: object
+
+      required:
+        - estudianteID
+        - materias
+        - periodoID
+        - metodo_pago
+
+      properties:
+        estudianteID:
+          type: string
+
+        materias:
+          type: array
+          minItems: 1
+          items:
+            type: string
+
+        periodoID:
+          type: string
+
+        metodo_pago:
+          type: string
+          enum:
+            - Efectivo
+            - Transferencia
+            - Débito
+            - Crédito
