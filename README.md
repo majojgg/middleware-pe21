@@ -184,3 +184,7 @@ Cambiar el nombre del campo `estudianteID` por `idEstudiante`.
 
 **Justificación:**
 Los clientes actuales envían `estudianteID`. Si el servidor deja de aceptarlo, las aplicaciones existentes producirán errores y dejarán de funcionar correctamente.
+
+## Reflexión
+
+Si otro equipo comenzara a consumir esta API mañana, realizaría varias mejoras al contrato OpenAPI para facilitar su integración. En primer lugar, agregaría ejemplos más detallados de solicitudes y respuestas para cada endpoint, incluyendo casos exitosos y de error. También documentaría de forma más precisa los códigos de estado HTTP y los posibles mensajes de error devueltos por la API. Además, incorporaría esquemas reutilizables para evitar duplicación de información y facilitar el mantenimiento del contrato. Finalmente, ampliaría la documentación de autenticación y versionado para que futuros cambios puedan implementarse sin afectar a los consumidores existentes de la API.
