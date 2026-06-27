@@ -279,3 +279,14 @@ Durante esta práctica se incorporaron los siguientes archivos:
 * `src/middlewares/rateLimiter.ts` – Middleware de limitación de solicitudes.
 * `generate-token.mjs` – Script para generar tokens JWT de prueba.
 * `.env.example` – Archivo de ejemplo para la configuración de la variable de entorno `JWT_SECRET`.
+
+## Evidencias
+
+### Prueba 1
+![Prueba 1](docs/screenshots/PE23_prueba1_201.png)
+
+### Prueba 2
+![Prueba 2](docs/screenshots/PE23_prueba2_401.png)
+
+### Prueba 3
+![Prueba 3](docs/screenshots/PE23_prueba3_401.png)
