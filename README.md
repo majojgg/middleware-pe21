@@ -197,3 +197,85 @@ Resultado de:
 npx @redocly/cli lint openapi.yaml
 
 ![Lint](docs/screenshots/lint-sin-errores.png)
+
+## Seguridad JWT (PE-2.3)
+
+### Generar un token de prueba
+
+```bash
+# Con el secreto por defecto del laboratorio
+node generate-token.mjs
+
+# Con un secreto personalizado
+JWT_SECRET=mi-secreto-largo node generate-token.mjs
+```
+
+### Probar el servicio
+
+#### Petición válida (201)
+
+```bash
+curl -X POST http://localhost:3000/v2/inscripciones \
+-H "Authorization: Bearer TU_TOKEN" \
+-H "Content-Type: application/json" \
+-d '{
+  "estudianteID":"123",
+  "materias":["Middleware"],
+  "periodoID":"2026-A",
+  "metodo_pago":"Transferencia"
+}'
+```
+
+#### Token inválido (401)
+
+```bash
+curl -X POST http://localhost:3000/v2/inscripciones \
+-H "Authorization: Bearer token.invalido"
+```
+
+### Variables de entorno
+
+
+## Rate Limiting (PE-2.3)
+
+El servicio implementa un middleware de **Rate Limiting** para controlar la cantidad de solicitudes que un cliente puede realizar durante un período de tiempo.
+
+### Configuración del laboratorio
+
+* Ventana de tiempo: **15 minutos**.
+* Máximo de solicitudes: **10 peticiones** por cliente.
+
+Cuando un cliente supera el límite permitido, el servidor responde con:
+
+```text
+HTTP/1.1 429 Too Many Requests
+```
+
+Además, se envía el encabezado **Retry-After**, indicando el tiempo que debe esperar el cliente antes de realizar una nueva solicitud.
+
+---
+
+## Evidencias de las pruebas realizadas
+
+Las capturas solicitadas en el laboratorio se encuentran en la carpeta:
+
+```text
+docs/screenshots/
+```
+
+Archivos:
+
+* `PE23_prueba1_201.png` – Token JWT válido (HTTP 201 Created).
+* `PE23_prueba2_401.png` – Firma inválida (HTTP 401 Unauthorized).
+* `PE23_prueba3_401.png` – Token con `alg:none` (HTTP 401 Unauthorized).
+
+---
+
+## Archivos agregados en el PE-2.3
+
+Durante esta práctica se incorporaron los siguientes archivos:
+
+* `src/middlewares/auth.ts` – Middleware de autenticación JWT con validación de firma HMAC-SHA256, algoritmo HS256 y verificación de los claims `sub` y `exp`.
+* `src/middlewares/rateLimiter.ts` – Middleware de limitación de solicitudes.
+* `generate-token.mjs` – Script para generar tokens JWT de prueba.
+* `.env.example` – Archivo de ejemplo para la configuración de la variable de entorno `JWT_SECRET`.
